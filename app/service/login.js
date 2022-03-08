@@ -1,27 +1,34 @@
-'use strict';
+'use strict'
 
-const Service = require('egg').Service;
+const Service = require('egg').Service
 
 class LoginService extends Service {
-  async login(data) {
+  async login(form) {
     try {
-      const res = await this.app.mysql.query('select * from test');
-      const userinfo = res.find(item => (item.username === data.username && item.password === data.password));
-      return userinfo;
+      const res = await this.app.mysql.get('user', { email: form.mobile, code: form.code })
+      // console.log(res)
+      if (res) return true
+      return false
     } catch (error) {
-      return null;
+      return null
     }
   }
 
-  async getall() {
+  async loginOut(userEmail) {
     try {
-      const res = await this.app.mysql.query('select * from test');
-      return res;
-    } catch (error) {
-      return null;
+      await this.app.mysql.update('user', { code: '' }, {
+        where: {
+          email: userEmail
+        }
+      })
+      return true
+    } catch (err) {
+      console.log(err)
+      return false
     }
   }
+
 }
 
-module.exports = LoginService;
+module.exports = LoginService
 
