@@ -40,21 +40,26 @@ class LoginController extends Controller {
 
   // 当前用户
   async getCurrentUser() {
+    const { ctx, app } = this
+    const token = ctx.request.header?.authorization
+    const userInfo = ctx.app.jwt.verify(token, app.config.jwt.secret)
+    console.log(userInfo)
+    const res = await ctx.service.login.getUserInfo(userInfo.mobile)
+    res.isLogin = true
+    return ctx.body = res
   }
 
   // 退出登录
   async loginOut() {
     const { userEmail } = this.ctx.request.body
-    const res = await this.ctx.service.login.loginOut( userEmail )
-    if( res ) {
+    const res = await this.ctx.service.login.loginOut(userEmail)
+    if (res) {
       this.ctx.body = {
-        code: 1,
-        msg: 'ok'
+        code: 1, msg: 'ok'
       }
     } else {
       this.ctx.body = {
-        code: 0,
-        msg: '退出失败'
+        code: 0, msg: '退出失败'
       }
     }
   }

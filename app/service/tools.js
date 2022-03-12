@@ -4,17 +4,14 @@
 
 const Service = require('egg').Service
 const { v4: uuid } = require('uuid')
-const  dayjs = require('dayjs')
+const dayjs = require('dayjs')
 
 const nodemailer = require('nodemailer')
 const user_email = '2576267399@qq.com'
 const auth_code = 'ummnwpwfxdthebjc'
 
 const transporter = nodemailer.createTransport({
-  service: 'qq',
-  secureConnection: true,
-  port: 465,
-  auth: {
+  service: 'qq', secureConnection: true, port: 465, auth: {
     user: user_email, // 账号
     pass: auth_code // 授权码
   }
@@ -52,11 +49,20 @@ class ToolService extends Service {
       await transporter.sendMail(mailOptions)
       let userInfo = await this.app.mysql.get('user', { email })
       // console.log(userInfo)
-      if(userInfo){
-      // 更新验证码和登录时间
-        await this.app.mysql.update('user',{code: randomNum, loginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')},{where: {id: userInfo.id}})
+      if (userInfo) {
+        // 更新验证码和登录时间
+        await this.app.mysql.update('user', {
+          code: randomNum, loginTime: dayjs()
+            .format('YYYY-MM-DD HH:mm:ss')
+        }, { where: { id: userInfo.id } })
       } else {
-        const options = {id: uuid(), email, code: randomNum, loginTime: dayjs().format('YYYY-MM-DD HH:mm:ss')}
+        const options = {
+          id: uuid(), email, code: randomNum, loginTime: dayjs()
+            .format('YYYY-MM-DD HH:mm:ss'), registerTime: dayjs()
+            .format('YYYY-MM-DD HH:mm:ss'),
+          integral: 0,
+          avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
+        }
         // console.log(options)
         await this.app.mysql.insert('user', options)
       }
