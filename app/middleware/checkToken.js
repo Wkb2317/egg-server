@@ -1,4 +1,4 @@
-'use strict'
+﻿'use strict'
 
 function checktoken() {
   return async function(ctx, next) {
@@ -6,7 +6,7 @@ function checktoken() {
     const secret = ctx.app.config.jwt.secret
     try {
       const userInfo = ctx.app.jwt.verify(token, secret)
-      if (userInfo.code === '1') {
+      if (userInfo?.code) {
         ctx.body = {
           isLogin: true,
           name: '程序猿',
