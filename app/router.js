@@ -5,4 +5,6 @@
  */
 module.exports = app => {
   require('./router/login')(app);
+  require('./router/upload')(app);
+  require('./router/user')(app)
 };

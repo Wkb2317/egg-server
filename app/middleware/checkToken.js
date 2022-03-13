@@ -7,17 +7,17 @@ function checktoken() {
     try {
       const userInfo = ctx.app.jwt.verify(token, secret)
       if (userInfo?.code) {
-        return ctx.body = {
-          isLogin: true,
-          name: '程序猿',
-          avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
-          userid: '00000001',
-          email: 'antdesign@alipay.com',
-          country: 'China',
-          access: 'admin',
-          address: '西湖区工专路 77 号',
-          phone: '0752-268888888'
-        }
+        // return ctx.body = {
+        //   isLogin: true,
+        //   name: '程序猿',
+        //   avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+        //   userid: '00000001',
+        //   email: 'antdesign@alipay.com',
+        //   country: 'China',
+        //   access: 'admin',
+        //   address: '西湖区工专路 77 号',
+        //   phone: '0752-268888888'
+        // }
         await next()
       } else {
         return ctx.body = {
