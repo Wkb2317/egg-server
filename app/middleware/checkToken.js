@@ -1,4 +1,4 @@
-'use strict'
+﻿'use strict'
 
 function checktoken() {
   return async function(ctx, next) {
