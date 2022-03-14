@@ -21,13 +21,13 @@ function checktoken() {
         await next()
       } else {
         return ctx.body = {
-          code: 1, isLogin: false, msg: '你还没有登录！'
+          code: 1, isLogin: false, msg: '重新登录！'
         }
       }
     } catch (err) {
       console.log(err)
       return ctx.body = {
-        code: 1, isLogin: false, msg: '你还没有登录！'
+        code: 1, isLogin: false, msg: '重新登录！'
       }
     }
   }
