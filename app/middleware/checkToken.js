@@ -6,28 +6,17 @@ function checktoken() {
     const secret = ctx.app.config.jwt.secret
     try {
       const userInfo = ctx.app.jwt.verify(token, secret)
-      if (userInfo?.code) {
-        // return ctx.body = {
-        //   isLogin: true,
-        //   name: '程序猿',
-        //   avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
-        //   userid: '00000001',
-        //   email: 'antdesign@alipay.com',
-        //   country: 'China',
-        //   access: 'admin',
-        //   address: '西湖区工专路 77 号',
-        //   phone: '0752-268888888'
-        // }
+      if (userInfo?.email) {
         await next()
       } else {
         return ctx.body = {
-          code: 1, isLogin: false, msg: '重新登录！'
+          code: 1, isLogin: false, msg: 'token解析不出来email！'
         }
       }
     } catch (err) {
       console.log(err)
       return ctx.body = {
-        code: 1, isLogin: false, msg: '重新登录！'
+        code: 1, isLogin: false, msg: '异常咯！'
       }
     }
   }

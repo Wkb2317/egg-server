@@ -5,8 +5,7 @@ const Service = require('egg').Service
 class LoginService extends Service {
   async login(form) {
     try {
-      const res = await this.app.mysql.get('user', { email: form.mobile, code: form.code })
-      // console.log(res)
+      const res = await this.app.mysql.get('user', { email: form.email, password: form.password })
       if (res) return true
       return false
     } catch (error) {
@@ -30,7 +29,12 @@ class LoginService extends Service {
 
   async getUserInfo(email) {
     const res = await this.app.mysql.get('user',{email})
-    return res
+    res.password = ''
+    if(res){
+      return res
+    } else {
+      return null
+    }
   }
 
 

@@ -9,13 +9,7 @@ class LoginController extends Controller {
     const { email } = ctx.query
     if (email) {
       const res = await ctx.service.tools.sendMail(email, '程序设计题库验证码')
-      // console.log(res)
-      res ? ctx.body = {
-        code: 1, msg: '验证码发送成功'
-      } : ctx.body = {
-        code: 0, msg: '邮箱不能为空'
-      }
-      return ctx.body
+      return res
     }
 
   }
@@ -42,10 +36,25 @@ class LoginController extends Controller {
   async getCurrentUser() {
     const { ctx, app } = this
     const token = ctx.request.header?.authorization
-    const userInfo = ctx.app.jwt.verify(token, app.config.jwt.secret)
-    console.log(userInfo)
-    const res = await ctx.service.login.getUserInfo(userInfo.mobile)
-    res.isLogin = true
+    let userInfo = null
+    try {
+      userInfo = ctx.app.jwt.verify(token, app.config.jwt.secret)
+    } catch (e) {
+        return ctx.body= {
+          code: 0,
+          msg: 'token校验失败',
+          isLogin: false
+        }
+    }
+
+    const res = await ctx.service.login.getUserInfo(userInfo.email)
+
+    if(res !== null){
+      res.isLogin = true
+    }else {
+      res.isLogin =  false
+    }
+    // console.log(res)
     return ctx.body = res
   }
 

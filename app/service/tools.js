@@ -26,6 +26,7 @@ function getRandomInt(min, max) {
 class ToolService extends Service {
   //
   async sendMail(email, subject) {
+    const {ctx} = this
     let randomNum = ''
     let index = 6
     while (index > 0) {
@@ -52,23 +53,24 @@ class ToolService extends Service {
       if (userInfo) {
         // 更新验证码和登录时间
         await this.app.mysql.update('user', {
-          code: randomNum, loginTime: dayjs()
-            .format('YYYY-MM-DD HH:mm:ss')
+          code: randomNum,
         }, { where: { id: userInfo.id } })
-      } else {
-        const options = {
-          id: uuid(), email, code: randomNum, loginTime: dayjs()
-            .format('YYYY-MM-DD HH:mm:ss'), registerTime: dayjs()
-            .format('YYYY-MM-DD HH:mm:ss'),
-          integral: 0,
-          avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
+        return ctx.body = {
+          code : 1,
+          msg : '发送成功'
         }
-        // console.log(options)
-        await this.app.mysql.insert('user', options)
+      } else {
+        return ctx.body = {
+          code: 0,
+          msg: '发送失败'
+        }
       }
-      return true
+
     } catch (err) {
-      return false
+      return  ctx.body = {
+        code: 0,
+        msg: '发送失败'
+      }
     }
   }
 
