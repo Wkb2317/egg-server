@@ -1,7 +1,7 @@
 const Controller = require('egg').Controller
 
 class user extends Controller {
-  //更新用户信息
+  // 更新用户信息
   async updateUser() {
     const { ctx, app } = this
     try {

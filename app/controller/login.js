@@ -21,7 +21,7 @@ class LoginController extends Controller {
     const isLogin = await ctx.service.login.login(userInfo)
 
     if (isLogin) {
-      const options = userInfo.autoLogin ? { expiresIn: '60h' } : { expiresIn: '12h' }
+      const options = userInfo.autoLogin ? { expiresIn: '30d' } : { expiresIn: '12h' }
       let token = this.app.jwt.sign(JSON.parse(JSON.stringify(userInfo)), this.app.config.jwt.secret, options)
       return ctx.body = {
         code: 1, msg: 'ok', token, currentAuthority: 'admin'
