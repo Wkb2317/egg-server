@@ -18,14 +18,15 @@ class LoginController extends Controller {
   async login() {
     const { ctx } = this
     const userInfo = ctx.request.body
-    const isLogin = await ctx.service.login.login(userInfo)
+    const res = await ctx.service.login.login(userInfo)
 
-    if (isLogin) {
+    if (res) {
       const options = userInfo.autoLogin ? { expiresIn: '30d' } : { expiresIn: '12h' }
       let token = this.app.jwt.sign(JSON.parse(JSON.stringify(userInfo)), this.app.config.jwt.secret, options)
-      return ctx.body = {
-        code: 1, msg: 'ok', token, currentAuthority: 'admin'
-      }
+      res.token = token
+      res.password  = ''
+      res.code = 1
+      return ctx.body = res
     }
     return ctx.body = {
       code: 0, msg: 'error'

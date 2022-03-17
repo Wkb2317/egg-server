@@ -28,6 +28,20 @@ class user extends Controller {
     const res = await ctx.service.user.updatePassword(ctx.request.body)
     return res
   }
+
+//  登录积分
+  async getLoginIntegration () {
+    const {ctx,app} = this
+    const uuid = ctx.request.query.uuid
+    if(uuid) {
+       await  ctx.service.user.getLoginIntegration(uuid)
+    } else {
+      return ctx.body = {
+        code: 0,
+        msg: '请传递uuid'
+      }
+    }
+  }
 }
 
 module.exports = user

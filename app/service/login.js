@@ -6,7 +6,7 @@ class LoginService extends Service {
   async login(form) {
     try {
       const res = await this.app.mysql.get('user', { email: form.email, password: form.password })
-      if (res) return true
+      if (res) return res
       return false
     } catch (error) {
       return null

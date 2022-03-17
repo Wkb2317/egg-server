@@ -14,9 +14,8 @@ function checktoken() {
         }
       }
     } catch (err) {
-      console.log(err)
       return ctx.body = {
-        code: 1, isLogin: false, msg: '异常咯！'
+        code: 1, isLogin: false, msg: 'token解析异常咯！'
       }
     }
   }

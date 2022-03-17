@@ -6,4 +6,6 @@ module.exports = app => {
 
   router.post('/api/updatePassword',controller.user.updatePassword)
 
+  router.get('/api/getLoginIntegration',controller.user.getLoginIntegration)
+
 }
