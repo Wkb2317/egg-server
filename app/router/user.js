@@ -8,4 +8,5 @@ module.exports = app => {
 
   router.get('/api/getLoginIntegration',controller.user.getLoginIntegration)
 
+  router.get('/api/getInegrationHistory',controller.user.getIntegrationHistory)
 }

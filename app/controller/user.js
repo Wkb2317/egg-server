@@ -42,6 +42,21 @@ class user extends Controller {
       }
     }
   }
+
+//  积分记录
+  async getIntegrationHistory(){
+    const {ctx,app} = this
+    const uuid = ctx.request.query.uuid
+    if(uuid) {
+      await  ctx.service.user.getIntegrationHistory(uuid)
+    } else {
+      return ctx.body = {
+        code: 0,
+        msg: '请求失败 ！'
+      }
+    }
+  }
+
 }
 
 module.exports = user

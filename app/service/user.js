@@ -55,7 +55,7 @@ class user extends service {
     const { ctx, app } = this
     try {
       const options = {
-        id: uuid(), email: userinfo.email, registerTime: dayjs()
+        id: uuid(), email: userinfo.email,name : '程序员' ,registerTime: dayjs()
           .format('YYYY-MM-DD HH:mm:ss'), integration: 0, password: userinfo.password, avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
       }
       const res = await app.mysql.insert('user', options)
@@ -81,7 +81,6 @@ class user extends service {
     // console.log(uuid)
     const { ctx, app } = this
     try {
-
       const res = await app.mysql.query(`select * from integration where id = '${uuid}' and time like '${dayjs().format('YYYY-MM-DD')}%'`,[])
       console.log(res)
       if (Object.keys(res).length) {
@@ -108,6 +107,23 @@ class user extends service {
     }
   }
 
+  async getIntegrationHistory(uuid){
+    const {ctx, app} = this
+    try {
+      let res = await app.mysql.select('integration',{where : {id :uuid}})
+      // console.log(res)
+      return ctx.body = {
+        code: 1,
+        msg: 'ok',
+        data: res
+      }
+    } catch (e) {
+      return ctx.body = {
+        code: 0,
+        msg: 'sql error',
+      }
+    }
+  }
 }
 
 module.exports = user

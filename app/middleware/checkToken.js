@@ -4,6 +4,7 @@ function checktoken() {
   return async function(ctx, next) {
     const token = ctx.request.header?.authorization
     const secret = ctx.app.config.jwt.secret
+    // console.log(token)
     try {
       const userInfo = ctx.app.jwt.verify(token, secret)
       if (userInfo?.email) {
