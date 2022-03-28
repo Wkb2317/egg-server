@@ -14,6 +14,7 @@
     "egg-jwt": "^3.1.7",
     "egg-mysql": "^3.0.0",
     "egg-scripts": "^2.11.0",
+    "egg-socket.io": "^4.1.6",
     "md5": "^2.3.0",
     "nodemailer": "^6.7.2",
     "stream-wormhole": "^1.1.0",
@@ -32,9 +33,9 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-server",
+    "start": "egg-scripts start --daemon --title=egg-server-server --sticky",
     "stop": "egg-scripts stop --title=egg-server-server",
-    "dev": "egg-bin dev",
+    "dev": "egg-bin dev --sticky",
     "debug": "egg-bin debug",
     "test": "npm run lint -- --fix && npm run test-local",
     "test-local": "egg-bin test",

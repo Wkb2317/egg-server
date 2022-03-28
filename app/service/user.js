@@ -247,6 +247,26 @@ class user extends service {
       }
     }
   }
+
+  // 拿消息
+  async getAllMessage(from_id, to_id) {
+    const { ctx, app } = this
+    try {
+      const res = await app.mysql.query(`select * from messages where from_id = '${to_id}' and to_id = '${from_id}' or from_id = '${from_id}' and to_id = '${to_id}' order by time`)
+      // console.log(res);
+      return ctx.body = {
+        code: 1,
+        data: res
+      }
+    } catch (error) {
+      console.log(error)
+      return ctx.body = {
+        code: 0,
+        msg: error
+      }
+      
+    }
+  }
 }
 
 module.exports = user
