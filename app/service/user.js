@@ -252,7 +252,7 @@ class user extends service {
   async getAllMessage(from_id, to_id) {
     const { ctx, app } = this
     try {
-      const res = await app.mysql.query(`select * from messages where from_id = '${to_id}' and to_id = '${from_id}' or from_id = '${from_id}' and to_id = '${to_id}' order by time`)
+      const res = await app.mysql.query(`select * from messages where   to_id = '${from_id}' or from_id = '${from_id}' order by time`)
       // console.log(res);
       return ctx.body = {
         code: 1,
