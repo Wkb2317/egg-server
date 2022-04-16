@@ -13,6 +13,17 @@ class QuestionService extends Service {
       return []
     }
   }
+
+  async getQuestionDetail(id) {
+    const { app } = this
+    try {
+      const res = await app.mysql.query('select * from question where id = ?', [id])
+      return res
+    } catch (error) {
+      console.log(error)
+      return []
+    }
+  }
 }
 
 module.exports = QuestionService
