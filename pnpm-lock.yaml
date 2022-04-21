@@ -18,6 +18,7 @@ specifiers:
   eslint-config-egg: ^7.1.0
   md5: ^2.3.0
   nodemailer: ^6.7.2
+  prettier: ^2.6.2
   stream-wormhole: ^1.1.0
   uuid: ^8.3.2
 
@@ -32,6 +33,7 @@ dependencies:
   egg-socket.io: 4.1.6
   md5: 2.3.0
   nodemailer: 6.7.3
+  prettier: 2.6.2
   stream-wormhole: 1.1.0
   uuid: 8.3.2
 
@@ -6217,6 +6219,12 @@ packages:
   /prelude-ls/1.1.2:
     resolution: {integrity: sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=}
     engines: {node: '>= 0.8.0'}
+
+  /prettier/2.6.2:
+    resolution: {integrity: sha512-PkUpF+qoXTqhOeWL9fu7As8LXsIUZ1WYaJiY/a7McAQzxjk82OF0tibkFXVCDImZtWxbvojFjerkiLb0/q8mew==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: false
 
   /printable/0.0.3:
     resolution: {integrity: sha1-9lPLObIUt4BJrhQD4vsF10ptUOA=}
