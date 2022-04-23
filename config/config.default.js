@@ -47,11 +47,11 @@ module.exports = appInfo => {
 
   config.mysql = {
     client: {
-      // host
-      host: '110.40.236.242', // port
-      port: '3306', // username
-      user: 'root', // password
-      password: 'root', // database
+      host: '127.0.0.1',
+      // host: '110.40.236.242',
+      port: '3306',
+      user: 'root',
+      password: 'root',
       database: 'program-bank',
     }, // load into app, default is open
     app: true, // load into agent, default is close

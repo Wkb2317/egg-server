@@ -155,6 +155,28 @@ class QuestionController extends Controller {
       };
     }
   }
+
+  async likeComment() {
+    try {
+      await this.ctx.service.question.likeComment(this.ctx.request.body);
+    } catch (error) {
+      this.ctx.body = {
+        code: 0,
+        msg: error.sqlMessage,
+      };
+    }
+  }
+
+  async deleteComment() {
+    try {
+      await this.ctx.service.question.deleteComment(this.ctx.request.body);
+    } catch (error) {
+      this.ctx.body = {
+        code: 0,
+        msg: error.sqlMessage,
+      };
+    }
+  }
 }
 
 module.exports = QuestionController;

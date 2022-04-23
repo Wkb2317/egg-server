@@ -175,10 +175,10 @@ class QuestionService extends Service {
   async submitComment({ userId, questionId, content }) {
     try {
       const res = await this.app.mysql.query(
-        "insert into comment (user_id, question_id, content,comment_time) values (?,?,?,?)",
-        [userId, questionId, content, dayjs().format("YYYY-MM-DD HH:mm:ss")],
+        "insert into comment (user_id, question_id, content,comment_time,zan_count) values" +
+          " (?,?,?,?,?)",
+        [userId, questionId, content, dayjs().format("YYYY-MM-DD HH:mm:ss"), 0],
       );
-      console.log(res);
       if (res.affectedRows) {
         return (this.ctx.body = {
           code: 1,
@@ -199,10 +199,11 @@ class QuestionService extends Service {
   }
 
   async getComment({ userId, questionId }) {
-    console.log(userId, questionId);
     try {
       const res = await this.app.mysql.query(
-        "select c.*,u.name,u.avatar from comment c join user u on c.user_id =  u.id  where user_id = ? and question_id = ?",
+        "select c.*,u.name,u.avatar,z.user_id as isLike from comment c join user u on c.user_id" +
+          " = u.id LEFT JOIN zan z on c.comment_id = z.comment_id and z.user_id = ? where  " +
+          "question_id = ? order by c.comment_time  desc",
         [userId, questionId],
       );
       return (this.ctx.body = {
@@ -215,6 +216,71 @@ class QuestionService extends Service {
       return (this.ctx.body = {
         code: 0,
         data: [],
+        msg: error.sqlMessage,
+      });
+    }
+  }
+
+  async likeComment({ userId, commentId }) {
+    try {
+      const selectRes = await this.app.mysql.query(
+        "select * from zan where user_id = ? and comment_id = ?",
+        [userId, commentId],
+      );
+      let updateCountSql = `update comment set zan_count = zan_count + 1  where comment_id = ${commentId}`;
+      let sql = `insert into zan (user_id,comment_id) values ('${userId}',${commentId})`;
+      if (Object.keys(selectRes).length) {
+        sql = `delete from zan where id = ${selectRes[0].id}`;
+        updateCountSql = `update comment set zan_count =  zan_count - 1  where comment_id = ${commentId}`;
+      }
+      const res = await this.app.mysql.query(sql);
+      const updateRes = await this.app.mysql.query(updateCountSql);
+
+      if (res.affectedRows && updateRes.affectedRows) {
+        return (this.ctx.body = {
+          code: 1,
+          msg: "ok",
+        });
+      } else {
+        return (this.ctx.body = {
+          code: 0,
+          msg: "操作失败",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return (this.ctx.body = {
+        code: 0,
+        msg: error.sqlMessage,
+      });
+    }
+  }
+
+  async deleteComment({ commentId }) {
+    const { ctx, app } = this;
+    try {
+      const res = await app.mysql.query(
+        "delete c.*,z.* from comment as c left join zan as z on c.comment_id = z.comment_id" +
+          " where" +
+          " c.comment_id" +
+          " = ?",
+        [commentId],
+      );
+      if (res.affectedRows) {
+        return (ctx.body = {
+          code: 1,
+          msg: "删除成功",
+        });
+      } else {
+        return (ctx.body = {
+          code: 0,
+          msg: "删除失败",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return (ctx.body = {
+        code: 0,
         msg: error.sqlMessage,
       });
     }
