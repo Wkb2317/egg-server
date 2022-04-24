@@ -201,8 +201,13 @@ class QuestionService extends Service {
   async getComment({ userId, questionId }) {
     try {
       const res = await this.app.mysql.query(
-        "select c.*,u.name,u.avatar,z.user_id as isLike from comment c join user u on c.user_id" +
-          " = u.id LEFT JOIN zan z on c.comment_id = z.comment_id and z.user_id = ? where  " +
+        "select c.*,u.name,u.avatar,z.user_id as isLike,r.reply_count from comment c join" +
+          " user u" +
+          " on c.user_id" +
+          " = u.id LEFT JOIN zan z on c.comment_id = z.comment_id and z.user_id = ? left join " +
+          "(select r.reply_id,COUNT(reply_id) as reply_count " +
+          "from reply r GROUP BY r.reply_id) r on c.comment_id = r.reply_id" +
+          " where  " +
           "question_id = ? order by c.comment_time  desc",
         [userId, questionId],
       );
@@ -266,6 +271,82 @@ class QuestionService extends Service {
           " = ?",
         [commentId],
       );
+      if (res.affectedRows) {
+        return (ctx.body = {
+          code: 1,
+          msg: "删除成功",
+        });
+      } else {
+        return (ctx.body = {
+          code: 0,
+          msg: "删除失败",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return (ctx.body = {
+        code: 0,
+        msg: error.sqlMessage,
+      });
+    }
+  }
+
+  async submitReply({ commentId, userId, content }) {
+    try {
+      const res = await this.app.mysql.query(
+        "insert into reply (from_userid, reply_id, reply_content,reply_time) values" + " (?,?,?,?)",
+        [userId, commentId, content, dayjs().format("YYYY-MM-DD HH:mm:ss")],
+      );
+      if (res.affectedRows) {
+        return (this.ctx.body = {
+          code: 1,
+          msg: "评论成功！",
+        });
+      }
+      return (this.ctx.body = {
+        code: 0,
+        msg: "评论失败！",
+      });
+    } catch (error) {
+      console.log(error);
+      return (this.ctx.body = {
+        code: 0,
+        msg: error.sqlMessage,
+      });
+    }
+  }
+
+  async getReply({ commentId }) {
+    try {
+      const res = await this.app.mysql.query(
+        "select r.id as reply_index, r.reply_content,r.from_userid,r.reply_time,u.name,u.avatar" +
+          " from reply" +
+          " r left" +
+          " join" +
+          " user u" +
+          " on " +
+          " r.reply_id  = ? and u.id = r.from_userid order by r.reply_time",
+        [commentId],
+      );
+      return (this.ctx.body = {
+        code: 1,
+        data: res,
+        msg: "ok",
+      });
+    } catch (error) {
+      console.log(error);
+      this.ctx.body = {
+        code: 0,
+        data: [],
+        msg: error.sqlMessage,
+      };
+    }
+  }
+
+  async deleteReply({ id }) {
+    const { ctx, app } = this;
+    try {
+      const res = await app.mysql.query("delete  from reply  where id = ? ", [id]);
       if (res.affectedRows) {
         return (ctx.body = {
           code: 1,
