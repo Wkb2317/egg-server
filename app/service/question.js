@@ -265,8 +265,8 @@ class QuestionService extends Service {
     const { ctx, app } = this;
     try {
       const res = await app.mysql.query(
-        "delete c.*,z.* from comment as c left join zan as z on c.comment_id = z.comment_id" +
-          " where" +
+        "delete c.*,z.*,r.* from comment as c left join zan as z on c.comment_id = z.comment_id" +
+          " left join reply r on c.comment_id = r.reply_id   where" +
           " c.comment_id" +
           " = ?",
         [commentId],
