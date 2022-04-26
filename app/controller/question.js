@@ -211,6 +211,41 @@ class QuestionController extends Controller {
       };
     }
   }
+
+  async submitDiscuss() {
+    try {
+      await this.ctx.service.question.submitDiscuss(this.ctx.request.body);
+    } catch (error) {
+      this.ctx.body = {
+        code: 0,
+        msg: error.sqlMessage,
+      };
+    }
+  }
+
+  async getDiscuss() {
+    try {
+      await this.ctx.service.question.getDiscuss();
+    } catch (error) {
+      this.ctx.body = {
+        code: 0,
+        data: [],
+        msg: error.sqlMessage,
+      };
+    }
+  }
+
+  async getLikeQuestion() {
+    try {
+      await this.ctx.service.question.getLikeQuestion(this.ctx.request.query);
+    } catch (error) {
+      this.ctx.body = {
+        code: 0,
+        data: [],
+        msg: error.sqlMessage,
+      };
+    }
+  }
 }
 
 module.exports = QuestionController;

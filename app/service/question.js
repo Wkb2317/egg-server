@@ -325,7 +325,7 @@ class QuestionService extends Service {
           " join" +
           " user u" +
           " on " +
-          " r.reply_id  = ? and u.id = r.from_userid order by r.reply_time",
+          "  u.id = r.from_userid where r.reply_id  = ?  order by r.reply_time desc",
         [commentId],
       );
       return (this.ctx.body = {
@@ -364,6 +364,75 @@ class QuestionService extends Service {
         code: 0,
         msg: error.sqlMessage,
       });
+    }
+  }
+
+  async submitDiscuss({ userId, data }) {
+    const { ctx, app } = this;
+    const time = dayjs().format("YYYY-MM-DD HH:mm:ss");
+    try {
+      const res = await app.mysql.query("insert into discuss (user_id,data,time)  values(?,?,?)", [
+        userId,
+        data,
+        time,
+      ]);
+      if (res.affectedRows) {
+        return (ctx.body = {
+          code: 1,
+          msg: "发布成功",
+        });
+      } else {
+        return (ctx.body = {
+          code: 0,
+          msg: "发布失败",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      return (ctx.body = {
+        code: 0,
+        msg: error.sqlMessage,
+      });
+    }
+  }
+
+  async getDiscuss() {
+    try {
+      const res = await this.app.mysql.query(
+        "select d.user_id,d.user_id,d.time,d.data,u.avatar,u.name from discuss d left join" +
+          " user u on" +
+          " d.user_id = u.id order by d.time ",
+      );
+      return (this.ctx.body = {
+        code: 1,
+        data: res,
+        msg: "ok",
+      });
+    } catch (error) {
+      console.log(error);
+      this.ctx.body = {
+        code: 0,
+        data: [],
+        msg: error.sqlMessage,
+      };
+    }
+  }
+
+  async getLikeQuestion({ data }) {
+    try {
+      const res = await this.app.mysql.query(`select * from question where title like '%${data}%'`);
+      return (this.ctx.body = {
+        code: 1,
+        data: res,
+        msg: "ok",
+      });
+    } catch (error) {
+      console.log(error);
+      this.ctx.body = {
+        code: 0,
+        data: [],
+        msg: error.sqlMessage,
+      };
     }
   }
 }

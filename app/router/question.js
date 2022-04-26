@@ -6,6 +6,8 @@ module.exports = (app) => {
   router.get("/api/getSubmitHistory", controller.question.getSubmit);
   router.get("/api/getComment", controller.question.getComment);
   router.get("/api/getReply", controller.question.getReply);
+  router.get("/api/getDiscuss", controller.question.getDiscuss);
+  router.get("/api/getLikeQuestion", controller.question.getLikeQuestion);
 
   router.post("/api/saveCode", controller.question.saveCode);
   router.post("/api/submitCode", controller.question.submitCode);
@@ -16,4 +18,5 @@ module.exports = (app) => {
   router.post("/api/deleteComment", controller.question.deleteComment);
   router.post("/api/submitReply", controller.question.submitReply);
   router.post("/api/deleteReply", controller.question.deleteReply);
+  router.post("/api/submitDiscuss", controller.question.submitDiscuss);
 };
