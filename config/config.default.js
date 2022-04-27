@@ -51,7 +51,7 @@ module.exports = (appInfo) => {
       // host: '110.40.236.242',
       port: "3306",
       user: "root",
-      password: "123456",
+      password: "root",
       database: "program-bank",
     }, // load into app, default is open
     app: true, // load into agent, default is close

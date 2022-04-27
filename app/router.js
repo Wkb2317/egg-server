@@ -10,4 +10,5 @@ module.exports = (app) => {
   require("./router/io")(app);
   require("./router/question")(app);
   require("./router/uploadQestion")(app);
+  require("./router/review")(app);
 };

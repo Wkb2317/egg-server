@@ -29,6 +29,18 @@ class UploadQuestionController extends Controller {
       }
     }
   }
+
+  async deleteUploadQuestion() {
+    try {
+      await this.ctx.service.uploadQuestion.deleteUploadQuestion(this.ctx.request.body)
+    } catch (error) {
+      console.log(error)
+      return this.ctx.body = {
+        code: 0,
+        msg: error.sqlMessage
+      }
+    }
+  }
 }
 
 module.exports = UploadQuestionController;
