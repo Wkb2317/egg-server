@@ -7,7 +7,14 @@ const dayjs = require("dayjs");
 class UploadQuestionService extends Service {
   async uploadQuestion({ title, detail, userId, type ,time}) { 
     try {
-      const res = await this.app.mysql.query('insert into upload_question (title,detail,user_id,type,time,status) values(?,?,?,?,?,?)', [title, detail, userId, type, time,0])
+      const selectRes = await this.app.mysql.query('select id from question where title = ?', [title])
+      if (Object.keys(selectRes).length) {
+        return this.ctx.body = {
+          code: 0,
+          msg: '题目名称重复！'
+        }
+      }
+      const res = await this.app.mysql.query('insert into question (title,detail,user_id,type,time,status) values(?,?,?,?,?,?)', [title, detail, userId, type, time,0])
       if (res.affectedRows) {
         return this.ctx.body = {
           code: 1,
@@ -15,7 +22,7 @@ class UploadQuestionService extends Service {
         }
       } else {
         return this.ctx.body = {
-          code: 1,
+          code: 0,
           msg: '提交失败'
         }
       }
@@ -30,7 +37,7 @@ class UploadQuestionService extends Service {
 
   async getUploadQuestion({ userId}) { 
     try {
-      const res = await this.app.mysql.query('select * from upload_question where user_id = ? order by time desc', [userId])
+      const res = await this.app.mysql.query('select * from question where user_id = ? order by time desc', [userId])
       return this.ctx.body = {
         code: 1,
         data: res,
@@ -46,20 +53,20 @@ class UploadQuestionService extends Service {
     }
   }
 
-  async deleteUploadQuestion({ id }) { 
+  async updateQuestion({ id,title, detail, type,time }) { 
     console.log(id)
     try {
-      const res = await this.app.mysql.query('delete from upload_question where id = ?', [id])
+      const res = await this.app.mysql.query('update question set title=?, detail=?, type=?,time=?,mark=?,status=? where id = ?', [title, detail, type,time,'',0,id])
       console.log(res)
       if (res.affectedRows) {
         return this.ctx.body = {
           code: 1,
-          msg: '删除成功'
+          msg: '提交成功'
         }
       } else {
         return this.ctx.body = {
-          code: 1,
-          msg: '删除失败'
+          code: 0,
+          msg: '提交失败'
         }
       }
     } catch (error) {

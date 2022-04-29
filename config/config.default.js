@@ -22,8 +22,8 @@ module.exports = (appInfo) => {
     listen: {
       path: "",
       port: 8001,
-      hostname: "127.0.0.1",
-      // hostname: '172.17.0.11',
+      // hostname: "127.0.0.1",
+      hostname: "172.17.0.11",
     },
   };
 
@@ -47,8 +47,8 @@ module.exports = (appInfo) => {
 
   config.mysql = {
     client: {
-      host: "127.0.0.1",
-      // host: '110.40.236.242',
+      // host: "127.0.0.1",
+      host: "110.40.236.242",
       port: "3306",
       user: "root",
       password: "root",

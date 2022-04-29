@@ -30,9 +30,9 @@ class UploadQuestionController extends Controller {
     }
   }
 
-  async deleteUploadQuestion() {
+  async updateQuestion() {
     try {
-      await this.ctx.service.uploadQuestion.deleteUploadQuestion(this.ctx.request.body)
+      await this.ctx.service.uploadQuestion.updateQuestion(this.ctx.request.body)
     } catch (error) {
       console.log(error)
       return this.ctx.body = {

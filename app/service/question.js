@@ -10,7 +10,7 @@ class QuestionService extends Service {
       return await app.mysql.query(
         ` select q.*,c.collect,e.user_id from question q LEFT JOIN 
         (select question_id,COUNT(question_id) AS collect from collect where is_collect = 1 GROUP BY
-         question_id) c on q.id = c.question_id LEFT JOIN collect e on e.question_id = q.id and e.is_collect = 1 and e.user_id = ? WHERE q.type = ?`,
+         question_id) c on q.id = c.question_id LEFT JOIN collect e on e.question_id = q.id and e.is_collect = 1 and e.user_id = ?  WHERE q.type = ?  and q.status = 1`,
         [userId, type],
       );
     } catch (error) {
