@@ -435,6 +435,27 @@ class QuestionService extends Service {
       };
     }
   }
+
+  async getCollectQuestion({ userId }) {
+    try {
+      const res = await this.app.mysql.query(
+        `select * from collect c left join question q on c.is_collect = ? and c.question_id = q.id  where c.user_id = ? and c.is_collect = ? order by q.time desc`,
+        [1, userId, 1],
+      );
+      return (this.ctx.body = {
+        code: 1,
+        data: res,
+        msg: "ok",
+      });
+    } catch (error) {
+      console.log(error);
+      this.ctx.body = {
+        code: 0,
+        data: [],
+        msg: error.sqlMessage,
+      };
+    }
+  }
 }
 
 module.exports = QuestionService;

@@ -246,6 +246,18 @@ class QuestionController extends Controller {
       };
     }
   }
+
+  async getCollectQuestion() {
+    try {
+      await this.ctx.service.question.getCollectQuestion(this.ctx.request.query);
+    } catch (error) {
+      this.ctx.body = {
+        code: 0,
+        data: [],
+        msg: error.sqlMessage,
+      };
+    }
+  }
 }
 
 module.exports = QuestionController;

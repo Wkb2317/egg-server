@@ -8,6 +8,7 @@ module.exports = (app) => {
   router.get("/api/getReply", controller.question.getReply);
   router.get("/api/getDiscuss", controller.question.getDiscuss);
   router.get("/api/getLikeQuestion", controller.question.getLikeQuestion);
+  router.get("/api/getCollectQuestion", controller.question.getCollectQuestion);
 
   router.post("/api/saveCode", controller.question.saveCode);
   router.post("/api/submitCode", controller.question.submitCode);
