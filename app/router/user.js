@@ -19,4 +19,8 @@ module.exports = (app) => {
   router.get("/api/getMonthRank", controller.user.getMonthRank);
 
   router.post("/api/getAllMessage", controller.user.getAllMessage);
+
+  router.post("/api/readMessage", controller.user.readMessage);
+
+  router.post("/api/readAllMessage", controller.user.readAllMessage);
 };

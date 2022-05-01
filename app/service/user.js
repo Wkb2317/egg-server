@@ -249,11 +249,11 @@ class user extends service {
   }
 
   // 拿消息
-  async getAllMessage(from_id, to_id) {
+  async getAllMessage(from_id) {
     const { ctx, app } = this
     try {
-      const res = await app.mysql.query(`select * from messages where   to_id = '${from_id}' or from_id = '${from_id}' order by time`)
-      // console.log(res);
+      const res = await app.mysql.query(`select * from messages where  to_id = '${from_id}' or from_id = '${from_id}' order by time `)
+      console.log(res);
       return ctx.body = {
         code: 1,
         data: res
@@ -263,6 +263,50 @@ class user extends service {
       return ctx.body = {
         code: 0,
         msg: error
+      }
+      
+    }
+  }
+
+  async readMessage({to_id,from_id}) {
+    const { ctx, app } = this
+    try {
+      const res = await app.mysql.query(`update  messages set is_read = 'true' where  to_id = '${to_id}' and from_id = '${from_id}' `)
+      return ctx.body = {
+        code: 1,
+        msg:'ok'
+      }
+    } catch (error) {
+      console.log(error)
+      return ctx.body = {
+        code: 0,
+        msg: error.sqlMessage
+      }
+      
+    }
+  }
+
+  async readAllMessage({to_id}) {
+    const { ctx, app } = this
+    try {
+      const res = await app.mysql.query(`update  messages set is_read = 'true' where  to_id = '${to_id}' `)
+      if (res.affectedRows) {
+        return ctx.body = {
+          code: 1,
+          msg:'操作成功'
+        }
+      } else {
+        ctx.body = {
+          code: 0,
+          msg:'操作失败'
+        }
+      }
+     
+    } catch (error) {
+      console.log(error)
+      return ctx.body = {
+        code: 0,
+        msg: error.sqlMessage
       }
       
     }

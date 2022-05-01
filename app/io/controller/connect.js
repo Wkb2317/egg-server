@@ -8,7 +8,6 @@ class TestController extends Controller {
     const { ctx, app } = this
     const userId = ctx.query.id
     const socketId = ctx.args[0]
-    console.log()
     try {
       const sql = `update user set socketId = '${socketId}' where id = '${userId}'`
       await app.mysql.query(sql)
@@ -43,12 +42,13 @@ class TestController extends Controller {
           from_user_name: fromUserInfo.name,
           to_user_avatar: toUserInfo.avatar,
           to_user_name: toUserInfo.name,
-          time
+          time,
+          is_read: 'false'
         })
       }
 
       // 入库
-      const insert_sql = `insert into messages (from_id,to_id,time,message,from_user_name,from_user_avatar,to_user_name,to_user_avatar) values ('${from_id}','${to_id}','${time}','${message}','${fromUserInfo.name}','${fromUserInfo.avatar}','${toUserInfo.name}','${toUserInfo.avatar}')`
+      const insert_sql = `insert into messages (from_id,to_id,time,message,from_user_name,from_user_avatar,to_user_name,to_user_avatar,is_read) values ('${from_id}','${to_id}','${time}','${message}','${fromUserInfo.name}','${fromUserInfo.avatar}','${toUserInfo.name}','${toUserInfo.avatar}','${false}')`
       await app.mysql.query(insert_sql)
     } catch (e) {
       console.log(e)
