@@ -1,9 +1,9 @@
-const service = require('egg').Service
+const service = require("egg").Service;
 
-class  upload extends  service{
+class upload extends service {
   async updateImageUrl() {
-    await  this.app.mysql.update('user',{})
+    await this.app.mysql.update("user", {});
   }
 }
 
-module.exports = upload
+module.exports = upload;

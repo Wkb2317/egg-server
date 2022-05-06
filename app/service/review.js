@@ -2,6 +2,7 @@
 
 const await = require("await-stream-ready/lib/await");
 const Service = require("egg").Service;
+const dayjs = require('dayjs')
 
 class ReviewService extends Service {
   async getNoReviewQuestions() {
@@ -23,15 +24,22 @@ class ReviewService extends Service {
     }
   }
 
-  async reviewQuestion({ id,status,mark }) {
+  async reviewQuestion({ id,status,mark,userId }) {
     const { ctx, app } = this;
     try {
-      const res = await app.mysql.query(' update  question set status = ?,mark = ? where id = ?', [status,mark,id])
+      const res = await app.mysql.query('update  question set status = ?,mark = ? where id = ?',
+        [status, mark, id])
+      if (status === "1") {
+        const time = dayjs().format("YYYY-MM-DD HH:mm:ss")
+        await app.mysql.query('insert into integration (id,type,value,time) values (?,?,?,?)',[userId,'submitQuestion',2,time])
+          
+        }
       ctx.body = {
         code: 1,
         data: res,
-        msg: 'ok'
+        msg: '更新成功'
       }
+      
     } catch (error) {
       console.log(error)
       ctx.body = {
